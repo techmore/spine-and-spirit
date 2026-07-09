@@ -32,12 +32,11 @@ document.addEventListener('DOMContentLoaded', function() {
   }
 
   // ----- Active nav link -----
-  const currentPath = window.location.pathname;
+  const currentFile = window.location.pathname.split('/').pop() || 'index.html';
   document.querySelectorAll('.nav-links a').forEach(function(link) {
     const href = link.getAttribute('href');
-    if (href === currentPath ||
-        (href !== '/' && currentPath.startsWith(href)) ||
-        (href === '/' && (currentPath === '/' || currentPath === ''))) {
+    const hrefFile = href.split('/').pop() || 'index.html';
+    if (currentFile === hrefFile) {
       link.classList.add('active');
     }
   });
