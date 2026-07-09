@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Product — Spine & Spirit</title>
+  <meta name="description" content="Premium rebound Bible — handcrafted from select materials.">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📖</text></svg>">
+</head>
+<body>
+
+  <header class="site-header">
+    <div class="header-inner">
+      <a href="/" class="logo">
+        <span class="logo-icon">✦</span>
+        Spine &amp; <span>Spirit</span>
+      </a>
+      <nav>
+        <button class="menu-toggle" aria-label="Toggle menu" aria-expanded="false">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M3 6h18M3 12h18M3 18h18"/>
+          </svg>
+        </button>
+        <ul class="nav-links">
+          <li><a href="/">Home</a></li>
+          <li><a href="/shop.html">Shop</a></li>
+          <li><a href="/about.html">About</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <section class="product-detail" id="product-detail">
+    <div class="container">
+      <div id="product-content">
+        <!-- Rendered by JS -->
+      </div>
+    </div>
+  </section>
+
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <div class="logo">
+            <span class="logo-icon">✦</span>
+            Spine &amp; <span>Spirit</span>
+          </div>
+          <p>Handcrafted rebound Bibles built to last generations. Premium materials, traditional techniques, heirloom quality.</p>
+        </div>
+        <div class="footer-col">
+          <h4>Shop</h4>
+          <ul>
+            <li><a href="/shop.html">All Bibles</a></li>
+            <li><a href="/shop.html?version=ESV">ESV Editions</a></li>
+            <li><a href="/shop.html?version=NIV">NIV Editions</a></li>
+            <li><a href="/shop.html?version=KJV">KJV Editions</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h4>Learn</h4>
+          <ul>
+            <li><a href="/about.html">About Us</a></li>
+            <li><a href="/about.html#process">Our Process</a></li>
+            <li><a href="/guide/">Resources</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h4>Account</h4>
+          <ul>
+            <li><a href="#">My Orders</a></li>
+            <li><a href="#">Contact</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <span>&copy; 2024 Spine &amp; Spirit. All rights reserved.</span>
+        <span>Crafted with care in the USA</span>
+      </div>
+    </div>
+  </footer>
+
+  <script src="js/products.js"></script>
+  <script src="js/main.js"></script>
+  <script>
+    (function() {
+      const urlParams = new URLSearchParams(window.location.search);
+      const id = urlParams.get('id');
+
+      if (!id) {
+        document.getElementById('product-content').innerHTML =
+          '<p class="text-center" style="padding: 4rem 0;">No product selected. <a href="/shop.html">Browse the collection.</a></p>';
+        return;
+      }
+
+      const product = getProduct(id);
+      if (!product) {
+        document.getElementById('product-content').innerHTML =
+          '<p class="text-center" style="padding: 4rem 0;">Product not found. <a href="/shop.html">Browse the collection.</a></p>';
+        return;
+      }
+
+      document.title = product.title + ' — Spine & Spirit';
+
+      const specRows = Object.entries(product.specs).map(function(kv) {
+        return '<div class="product-spec">' +
+          '<div class="product-spec-label">' + kv[0] + '</div>' +
+          '<div class="product-spec-value">' + kv[1] + '</div>' +
+          '</div>';
+      }).join('');
+
+      document.getElementById('product-content').innerHTML =
+        '<nav style="margin-bottom: 2rem; font-size: 0.85rem; color: var(--brown-400);">' +
+        '<a href="/shop.html" style="color: var(--brown-400);">Shop</a> <span style="margin: 0 0.5rem;">/</span> ' +
+        '<span>' + product.title + '</span>' +
+        '</nav>' +
+        '<div class="product-detail-layout">' +
+        '<div class="product-detail-gallery">' +
+        '<div class="product-detail-image">' +
+        '<span class="placeholder-icon">✦</span>' +
+        '</div>' +
+        '</div>' +
+        '<div class="product-detail-info">' +
+        '<div class="product-detail-version">' + product.version + (product.badge ? ' &middot; ' + product.badge : '') + '</div>' +
+        '<h1>' + product.title + '</h1>' +
+        '<p style="font-family: var(--font-accent); font-style: italic; color: var(--brown-500); margin-bottom: 1rem;">' + product.subtitle + '</p>' +
+        '<div class="product-detail-price">' + formatPrice(product.price) + '</div>' +
+        '<div class="product-detail-description">' +
+        '<p>' + product.description + '</p>' +
+        '</div>' +
+        '<div class="product-specs">' + specRows + '</div>' +
+        '<div class="product-actions">' +
+        '<a href="#" class="btn btn-primary" onclick="alert(\'PayPal purchase link coming soon. This product is $' + product.price.toFixed(2) + '. We will notify you when ordering is live.\'); return false;">Add to Cart</a>' +
+        '<a href="/shop.html" class="btn btn-secondary">Back to Shop</a>' +
+        '</div>' +
+        '</div>' +
+        '</div>';
+    })();
+  </script>
+</body>
+</html>

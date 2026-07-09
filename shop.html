@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Shop — Spine & Spirit</title>
+  <meta name="description" content="Browse our collection of handcrafted rebound Bibles. ESV, NIV, KJV, NKJV, NASB, LSB, CSB, NRSV, NLT — premium goatskin and calfskin editions.">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📖</text></svg>">
+</head>
+<body>
+
+  <!-- Header -->
+  <header class="site-header">
+    <div class="header-inner">
+      <a href="/" class="logo">
+        <span class="logo-icon">✦</span>
+        Spine &amp; <span>Spirit</span>
+      </a>
+      <nav>
+        <button class="menu-toggle" aria-label="Toggle menu" aria-expanded="false">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M3 6h18M3 12h18M3 18h18"/>
+          </svg>
+        </button>
+        <ul class="nav-links">
+          <li><a href="/">Home</a></li>
+          <li><a href="/shop.html">Shop</a></li>
+          <li><a href="/about.html">About</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Page Header -->
+  <section class="page-header">
+    <div class="container">
+      <h1>Our Collection</h1>
+      <p>Handcrafted rebound Bibles — each one built to order</p>
+    </div>
+  </section>
+
+  <!-- Shop -->
+  <section class="page-content">
+    <div class="container">
+      <div class="shop-toolbar">
+        <span class="shop-count" id="product-count"></span>
+        <div class="shop-filters" id="version-filters">
+          <button class="filter-btn active" data-filter="all">All</button>
+        </div>
+      </div>
+      <div class="product-grid" id="shop-grid">
+        <!-- Rendered by JS -->
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <div class="logo">
+            <span class="logo-icon">✦</span>
+            Spine &amp; <span>Spirit</span>
+          </div>
+          <p>Handcrafted rebound Bibles built to last generations. Premium materials, traditional techniques, heirloom quality.</p>
+        </div>
+        <div class="footer-col">
+          <h4>Shop</h4>
+          <ul>
+            <li><a href="/shop.html">All Bibles</a></li>
+            <li><a href="/shop.html?version=ESV">ESV Editions</a></li>
+            <li><a href="/shop.html?version=NIV">NIV Editions</a></li>
+            <li><a href="/shop.html?version=KJV">KJV Editions</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h4>Learn</h4>
+          <ul>
+            <li><a href="/about.html">About Us</a></li>
+            <li><a href="/about.html#process">Our Process</a></li>
+            <li><a href="/guide/">Resources</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h4>Account</h4>
+          <ul>
+            <li><a href="#">My Orders</a></li>
+            <li><a href="#">Contact</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <span>&copy; 2024 Spine &amp; Spirit. All rights reserved.</span>
+        <span>Crafted with care in the USA</span>
+      </div>
+    </div>
+  </footer>
+
+  <script src="js/products.js"></script>
+  <script src="js/main.js"></script>
+  <script>
+    (function() {
+      // Get filter from URL
+      const urlParams = new URLSearchParams(window.location.search);
+      const initialFilter = urlParams.get('version') || 'all';
+
+      const grid = document.getElementById('shop-grid');
+      const countEl = document.getElementById('product-count');
+      const filterContainer = document.getElementById('version-filters');
+
+      // Build version filter buttons
+      const versions = getAllVersions();
+      versions.forEach(function(v) {
+        const btn = document.createElement('button');
+        btn.className = 'filter-btn' + (v === initialFilter ? ' active' : '');
+        btn.dataset.filter = v;
+        btn.textContent = v;
+        filterContainer.appendChild(btn);
+      });
+
+      function renderProducts(filter) {
+        const products = getProductsByVersion(filter);
+        countEl.textContent = 'Showing ' + products.length + ' product' + (products.length !== 1 ? 's' : '');
+
+        grid.innerHTML = products.map(function(p) {
+          return '<a href="/product.html?id=' + p.id + '" class="product-card">' +
+            '<div class="product-card-image">' +
+            (p.badge ? '<span class="product-card-badge">' + p.badge + '</span>' : '') +
+            '<span class="placeholder-icon">✦</span>' +
+            '</div>' +
+            '<div class="product-card-body">' +
+            '<div class="product-card-version">' + p.version + '</div>' +
+            '<h3 class="product-card-title">' + p.title + '</h3>' +
+            '<p class="product-card-description">' + p.subtitle + '</p>' +
+            '<div class="product-card-footer">' +
+            '<span class="product-card-price">' +
+            (p.originalPrice ? '<span class="original">' + formatPrice(p.originalPrice) + '</span>' : '') +
+            formatPrice(p.price) +
+            '</span>' +
+            '</div>' +
+            '</div>' +
+            '</a>';
+        }).join('');
+      }
+
+      // Filter click
+      filterContainer.addEventListener('click', function(e) {
+        if (e.target.classList.contains('filter-btn')) {
+          filterContainer.querySelectorAll('.filter-btn').forEach(function(b) { b.classList.remove('active'); });
+          e.target.classList.add('active');
+          renderProducts(e.target.dataset.filter);
+        }
+      });
+
+      renderProducts(initialFilter);
+    })();
+  </script>
+</body>
+</html>
